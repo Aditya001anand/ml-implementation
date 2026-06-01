@@ -39,4 +39,4 @@ for i in range(len(x_test)):
 mse=error_sum/len(x_test)
 print(f"bias:{w[0]:.4f}")
 print(f"weights:{[round(wt,4) for wt in w[1:]]}")                                
-print(f"Error rate:{mse:.4f}")
+print(f"mse:{mse:.4f}")
