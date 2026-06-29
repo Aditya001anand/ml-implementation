@@ -33,10 +33,15 @@ for epoch in range(500):
     for j in range(column_count):
         w[j]-=lr*(grads[j]/len(x_t))
 error_sum=0
+ss_tot=0
+y_test_mean=sum(y_test)/len(y_test)
 for i in range(len(x_test)):
     test_pred=sum(w[j]*x_test[i][j] for j in range(column_count))
     error_sum+=(test_pred-y_test[i])**2
+    ss_tot+=(y_test[i]-y_test_mean)**2
 mse=error_sum/len(x_test)
+r2=1-(error_sum/ss_tot)
 print(f"bias:{w[0]:.4f}")
 print(f"weights:{[round(wt,4) for wt in w[1:]]}")                                
 print(f"mse:{mse:.4f}")
+print(f"r2:{r2:.4f}")
