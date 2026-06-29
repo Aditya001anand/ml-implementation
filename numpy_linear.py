@@ -18,7 +18,11 @@ test_ones = np.ones((len(x_test),1))
 x_test_b=np.c_[test_ones,x_test]
 preds=x_test_b.dot(w)
 mse=np.mean((preds-y_test)**2)
+ss_res = np.sum((preds - y_test)**2)
+ss_tot = np.sum((y_test - np.mean(y_test))**2)
+r2 = 1 - (ss_res / ss_tot)
 
 print(f"bias: {w[0]:.4f}")
-print(f"weights: {[round(weight,4) for weight in w[1:]]}")
+print(f"weights: {[round(float(weight), 4) for weight in w[1:]]}")
 print(f"mse: {mse:.4f}")
+print(f"r2 score: {r2:.4f}")
