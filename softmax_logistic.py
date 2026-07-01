@@ -7,18 +7,18 @@ def softmax(z_list):
     sum_exps=sum(exps)
     return [e/sum_exps for e in exps]
 x,y_raw=[],[]
-with open('data.csv','r') as f:
+flower_map={}
+cid=0
+with open('IRIS.csv','r') as f:
     reader=csv.DictReader(f)
-    col=['LongestShell','Diameter','Height','WholeWeight','ShuckedWeight','VisceraWeight','ShellWeight']
+    col=['sepal_length','sepal_width','petal_length','petal_width']
     for row in reader:
         x.append([float(row[c]) for c in col])
-        rings=float(row['Rings'])
-        if rings<=8:
-            y_raw.append(0)
-        elif rings<=10:
-            y_raw.append(1)
-        else:
-            y_raw.append(2)
+        species=row['species']
+        if species not in flower_map:
+            flower_map[species]=cid
+            cid+=1
+        y_raw.append(flower_map[species])
 num_classes=3
 y=[]
 for val in y_raw:
@@ -61,6 +61,7 @@ correct=0
 tp=[0]*num_classes
 fp=[0]*num_classes
 fn=[0]*num_classes
+cm=[[0]*num_classes for _ in range(num_classes)]
 for i in range(len(x_test)):
     scores=[]
     for c in range(num_classes):
@@ -69,6 +70,7 @@ for i in range(len(x_test)):
     probs=softmax(scores)
     pred=probs.index(max(probs))
     actual=y_test[i]
+    cm[actual][pred]+=1
     if pred==actual:
         correct+=1
         tp[actual]+=1
@@ -94,3 +96,6 @@ print(f"Accuracy:{accuracy:.2f}%")
 print(f"Macro Precision:{macro_precision:.4f}")
 print(f"Macro Recall:{macro_recall:.4f}")
 print(f"Macro F1-Score:{macro_f1:.4f}")
+print("\nConfusion Matrix (Rows = Actual, Columns = Predicted):")
+for row in cm:
+    print(row)
