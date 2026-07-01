@@ -8,13 +8,15 @@ def sigmoid(z):
         return 1.0
     return 1.0/(1.0+math.exp(-z))
 x,y=[],[]
-with open('data.csv','r') as f:
+with open('IRIS.csv','r') as f:
     reader=csv.DictReader(f)
-    col=['LongestShell','Diameter','Height','WholeWeight','ShuckedWeight','VisceraWeight','ShellWeight']
+    col=['sepal_length','sepal_width','petal_length','petal_width']
+    target=None
     for row in reader:
         x.append([float(row[c]) for c in col])
-        rings=float(row['Rings'])
-        if rings>10:
+        if target is None:
+            target=row['species']
+        if row['species']==target:
             y.append(1.0)
         else:
             y.append(0.0)
@@ -71,3 +73,6 @@ print(f"Accuracy:{accuracy:.2f}%")
 print(f"Precision:{precision:.4f}")
 print(f"Recall:{recall:.4f}")
 print(f"F1-Score:{f1_score:.4f}")
+print("\nConfusion Matrix (Rows = Actual, Columns = Predicted):")
+print(f"[[{tn}  {fp}]")
+print(f" [{fn}  {tp}]]")
